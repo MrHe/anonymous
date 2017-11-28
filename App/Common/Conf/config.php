@@ -3,7 +3,8 @@ return array(
 	'URL_ROUTER_ON'   => true,
 	'URL_ROUTE_RULES'=>array(
 	    'v/:id' => "Home/Topic/view",
-        't' =>  "Home/Topic/show",
+        't/:p' =>  "Home/Topic/show",
+        't' => "Home/Topic/show",
         're' => "Home/Topic/reply",
         's' => "Home/Collect/show",
         'u' => "Home/User/login",
