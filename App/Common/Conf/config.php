@@ -8,7 +8,7 @@ return array(
         're' => "Home/Topic/reply",
         's' => "Home/Collect/show",
         'u' => "Home/User/login",
-        
+        'info'=>"Home/User/info",
 	),
 	'DB_TYPE'               =>  'mysql',     // 数据库类型
     'DB_HOST'               =>  '127.0.0.1', // 服务器地址

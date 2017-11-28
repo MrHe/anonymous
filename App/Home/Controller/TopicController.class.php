@@ -123,8 +123,7 @@ class TopicController extends CommonController
 	}
 	public function show(){
 		$topic_count = M("topic")->count();
-		dump(I("get."));
-		$page = new \Think\Page($topic_count,5);
+		$page = new \Think\Page($topic_count,15);
 		$topic_data = M("topic")->order("topic_time DESC")->join(C("PREFIX")."topic_text ON topic.topic_id = topic_text.topic_id")->limit($page->firstRow.",".$page->listRows)->select();
 		$this->assign("list",$topic_data);
 		$this->assign("page",$page->show());

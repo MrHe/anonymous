@@ -3,9 +3,13 @@
 	<ul class="layui-nav layui-bg-green" lay-filter="">
 		<img src="__PUBLIC__/images/logo.png" alt="" style="width: 40px;height: 40px;">
 	  <li class="layui-nav-item"><a href="/">{$Think.config.WEB_NAME}</a></li>
-	  <li class="layui-nav-item"><a href="/p">问答</a></li>
+	  <li class="layui-nav-item"><a href="/t">问答</a></li>
 	  <li class="layui-nav-item"><a href="/s">收藏</a></li>
+	  <if condition="$user eq false">
 	  <li class="layui-nav-item layui-nav-right"><a href="/u">登录</a></li>
+	  <else />
+	  <li class="layui-nav-item layui-nav-right"><a href="/info">{$user.username}</a></li>
+	  </if>
 	</ul>
 	<style>
 		.layui-nav-right{

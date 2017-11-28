@@ -48,7 +48,31 @@
             </li>
           </volist>
       </ul>
-    </div>
+      <div id="page" style="margin:0 auto;">
+        <span class="layui-btn" style="width: 100%;margin-top: 10px;">下一页</span>
+        <input type="hidden" id="num" value="{$Think.get.p|default='1'}">
+      </div>
+      <script>
+        function jump(count,url) { 
+            window.setTimeout(function(){  
+                count--;  
+                if(count > 0) {  
+                    jump(count);  
+                } else {  
+                    location.href=url;  
+                }  
+            }, 200);
+        }
+        layui.use(["jquery"],function(){
+          var $ = layui.$;
+          $("#page").click(function(){
+            $("#page").addClass("layui-anim layui-anim-upbit");
+              var page_num = $("#num").val();
+              var url = "/t/"+ ++page_num;
+              jump(1,url);
+          });
+        });
+      </script>
   </div>
 </div>
 </block>
