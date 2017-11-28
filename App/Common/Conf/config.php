@@ -2,11 +2,11 @@
 return array(
 	'URL_ROUTER_ON'   => true,
 	'URL_ROUTE_RULES'=>array(
-	    't/:id' => "Home/Topic/View",
-        'p' =>  "Home/Topic/Show",
+	    'v/:id' => "Home/Topic/view",
+        't' =>  "Home/Topic/show",
         're' => "Home/Topic/reply",
-        's' => "Home/Collect/Show",
-        'u' => "Home/User/Login",
+        's' => "Home/Collect/show",
+        'u' => "Home/User/login",
         
 	),
 	'DB_TYPE'               =>  'mysql',     // 数据库类型

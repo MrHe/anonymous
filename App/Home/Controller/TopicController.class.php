@@ -121,4 +121,14 @@ class TopicController extends CommonController
 			$this->error("请不要尝试hack");
 		}
 	}
+	public function show(){
+		$topic_count = M("topic")->count();
+		dump(I("get."));
+		$page = new \Think\Page($topic_count,5);
+		$topic_data = M("topic")->order("topic_time DESC")->join(C("PREFIX")."topic_text ON topic.topic_id = topic_text.topic_id")->limit($page->firstRow.",".$page->listRows)->select();
+		$this->assign("list",$topic_data);
+		$this->assign("page",$page->show());
+		$this->assign("title","话题");
+		$this->display();
+	}
 }

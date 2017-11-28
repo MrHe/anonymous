@@ -1,0 +1,54 @@
+<extend name="Public:base" />
+<block name="main">
+
+<div class="main layui-clear">
+  <div class="wrap">
+    <div class="layui-form-item">
+      <!-- <div class="layui-input-block"> -->
+        <input type="text" name="title" required  lay-verify="required" placeholder="请输入你的问题" autocomplete="off" class="layui-input" id="post">
+      <!-- </div> -->
+    </div>
+    <script>
+    layui.use(['jquery', 'layer'], function(){ 
+      var $ = layui.$ //重点处
+      ,layer = layui.layer;
+      var content = '';
+      $("#post").click(function(){
+        layer.open({
+          type: 2,
+          title: "提问",
+          closeBtn: 1,
+          shadeClose: true,
+          area: ['750px', '300px'],
+          skin: 'layui-layer-molv',
+          content: ["{:U('Home/Topic/ask')}","no"]
+        });
+      });
+    });
+    </script>
+    <div class="content" style="margin-right:0">
+      <ul class="fly-list">
+        <volist name="list" id="vo">
+          <li class="fly-list-li">
+              <a href="user/home.html" class="fly-list-avatar">
+                <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0" alt="">
+              </a>
+              <h2 class="fly-tip">
+                <a href="/v/{$vo.topic_id}">{$vo.topic_title|htmlspecialchars_decode}</a>
+              </h2>
+              <p>
+                <span><a href="user/home.html">{$vo.topic_poster|default="anonymous"}</a></span>
+                <span>{$vo.topic_time|timespan}</span>
+                <!-- <span>layui框架综合</span> -->
+                <span class="fly-list-hint"> 
+                  <i class="iconfont" title="回复">&#xe60c;</i> {$vo.topic_reply}
+                  <i class="iconfont" title="查看">&#xe60b;</i> {$vo.topic_click}
+                </span>
+              </p>
+            </li>
+          </volist>
+      </ul>
+    </div>
+  </div>
+</div>
+</block>
