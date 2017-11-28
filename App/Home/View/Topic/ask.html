@@ -1,0 +1,45 @@
+<include file="Public/header.html" />
+  <div class="layui-form-item">
+    <div class="layui-input-block" style="width: 80%;margin-top: 20px;margin-left: 10%;">
+      <input type="text" name="title" required  lay-verify="required" placeholder="请输入你的问题" autocomplete="off" class="layui-input" id="post">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <div class="layui-input-block" style="width: 80%;margin-top: 20px;margin-left: 10%;">
+      <textarea name="desc" placeholder="请输入问题的具体描述" class="layui-textarea" id="content"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block" style="width: 80%;margin-top: 20px;margin-left: 10%;">
+      <span class="layui-btn" id="send">提问</span>
+    </div>
+  </div>
+  <script>
+    layui.use(['jquery','layer'],function(){
+      var $ = layui.$;
+      var url = "{:U('Home/Topic/post')}";
+      $("#send").click(function(){
+        if($("#post").val().length < 4){
+          layer.alert("您输入的描述过短,请重新输入.");
+          return;
+        }
+        $.post(url,{
+          topic_title:$("#post").val(),
+          topic_text:$("#content").val()
+        },function(data){
+          if(data.status==1){
+            layer.alert("提问成功",{
+              skin: 'layui-layer-molv' //样式类名
+              ,closeBtn: 0
+            },function(){
+              var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+              parent.layer.close(index);
+            });
+          }else{
+            layer.alert("提问失败");
+          }
+        },"json");
+      });
+    });
+  </script>
+  <include file="Public/footer.html" />

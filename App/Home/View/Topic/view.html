@@ -1,0 +1,116 @@
+<extend name="Public:base" />
+<block name="main">
+
+<div class="main layui-clear">
+  <div class="wrap">
+    <div class="layui-form-item">
+      <!-- <div class="layui-input-block"> -->
+        <input type="text" name="title" required  lay-verify="required" placeholder="请输入你的问题" autocomplete="off" class="layui-input" id="post">
+      <!-- </div> -->
+    </div>
+    <script>
+    layui.use(['jquery', 'layer'], function(){ 
+      var $ = layui.$ //重点处
+      ,layer = layui.layer;
+      var content = '';
+      $("#post").click(function(){
+        layer.open({
+          type: 2,
+          title: "提问",
+          closeBtn: 1,
+          shadeClose: true,
+          area: ['750px', '300px'],
+          skin: 'layui-layer-molv',
+          content: ["{:U('Home/Topic/ask')}","no"]
+        });
+      });
+    });
+    </script>
+    <div class="content detail">
+      <div class="fly-panel detail-box">
+        <h1>{$list.topic_title}</h1>
+        <div class="fly-tip fly-detail-hint">
+          <span>{$list.topic_poster|default="anonymous"}</span>
+          <div class="fly-list-hint">
+            <i class="iconfont" title="回复">&#xe60c;</i> {$list.topic_reply}
+            <i class="iconfont" title="查看">&#xe60b;</i> {$list.topic_click}
+          </div>
+        </div>
+        <div class="detail-about">
+          <em>发布于:{$post_time}</em>
+        </div>
+        <div class="detail-body photos">
+          {$list.topic_text.topic_text|htmlspecialchars_decode}
+        </div>
+      </div>
+      <form class="layui-form" method="post">
+        <input type="hidden" name="topic_id" value="{$list.topic_id}">
+          <div class="layui-form-item layui-form-text">
+              <textarea name="post_text" placeholder="请输入回复内容" class="layui-textarea"></textarea>
+          </div>
+          <div class="layui-form-item">
+              <button class="layui-btn" lay-submit lay-filter="formDemo">回复</button>
+          </div>
+      </form>
+      <script>
+        //Demo
+        layui.use(['form','jquery'], function(){
+          var form = layui.form;
+          var $ = layui.jquery;
+          //监听提交
+          form.on('submit(formDemo)', function(data){
+            var url = "{:U('Home/Topic/reply')}";
+            
+            $.post(url,{
+              topic_id:data.field.topic_id,
+              post_text:data.field.post_text
+            },function(res){
+              layer.msg(res.tips);
+              return false;
+            },"json");
+          });
+        });
+        </script>
+      <div class="fly-panel detail-box">
+        <ul class="jieda photos">
+          <volist name="post" id="vo">
+            <li data-id="12" class="jieda-daan">
+              <a name="item-121212121212"></a>
+              <div class="detail-about detail-about-reply">
+                <a class="jie-user" href="">
+                  <img src="__PUBLIC__/images/default.png" alt="">
+                  <cite>
+                    <i>{$vo.post_poster|default="anonymous"}</i>
+                  </cite>
+                </a>
+                <div class="detail-hits">
+                  <span>{$vo.post_time}</span>
+                </div>
+              </div>
+              <div class="detail-body jieda-body">
+                <p>{$vo.post_text|htmlspecialchars_decode}</p>
+              </div>
+              <div class="jieda-reply">
+                <!-- <span class="jieda-zan zanok" type="zan"><i class="iconfont icon-zan"></i><em>12</em></span> -->
+                <span type="reply"><i class="iconfont icon-svgmoban53"></i>回复</span>
+              </div>
+            </li>
+          </volist>
+        </ul>
+      </div>
+      <div id="page">
+        
+      </div>
+
+    </div>
+  </div>
+  <div class="edge">
+    <dl class="fly-panel fly-list-one">
+      <dt class="fly-panel-title">热门讨论</dt>
+    </dl>
+    <dl class="fly-panel fly-list-one">
+      <dt class="fly-panel-title">等待回答</dt>
+    </dl>
+  </div>
+</div>
+</block>

@@ -1,8 +1,12 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
-class IndexController extends Controller {
+/**
+ * 2017-11-28
+ * author:dilu
+ */
+class IndexController extends CommonController {
     public function index(){
-        $this->display();
+       
     }
 }
