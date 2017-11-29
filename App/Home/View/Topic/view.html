@@ -42,6 +42,13 @@
         <div class="detail-body photos">
           {$list.topic_text.topic_text|htmlspecialchars_decode}
         </div>
+        <div style="width: 100%;">
+          <if condition="$collect neq true">
+          <span class="layui-btn layui-btn-radius layui-btn-warm" style="margin:2px 45%;" id="collect">收藏</span>
+          <else />
+          <span class="layui-btn layui-btn-radius layui-btn-warm" style="margin:2px 45%;" id="discollect">取消收藏</span>
+          </if>
+        </div>
       </div>
       <form class="layui-form" method="post">
         <input type="hidden" name="topic_id" value="{$list.topic_id}">
@@ -50,8 +57,7 @@
               <textarea name="post_text" placeholder="请输入回复内容" class="layui-textarea"></textarea>
           </div>
           <div class="layui-form-item">
-              <button class="layui-btn layui-btn-radius" lay-submit lay-filter="formDemo">回复</button>
-              <span class="layui-btn layui-btn-radius layui-btn-warm">收藏</span>
+              <button class="layui-btn" lay-submit lay-filter="formDemo">回复</button>
           </div>
       </form>
       <script>
@@ -59,6 +65,32 @@
         layui.use(['form','jquery'], function(){
           var form = layui.form;
           var $ = layui.jquery;
+          //收藏ajax
+          $("#collect").click(function(){
+            var url = "{:U('Home/Collect/add')}";
+            var topic_id = $("input[name=topic_id]");
+            $.post(url,{
+              topic_id:topic_id.val()
+            },function(data){
+              layer.msg(data.tips);
+              if(data.status == 1){
+                var t = setTimeout("location.reload()",300);
+              }
+            },"json");
+          });
+          //取消收藏ajax
+          $("#discollect").click(function(){
+            var url = "{:U('Home/Collect/del')}";
+            var topic_id = $("input[name=topic_id]");
+            $.post(url,{
+              topic_id:topic_id.val()
+            },function(data){
+              layer.msg(data.tips);
+              if(data.status == 1){
+                var t = setTimeout("location.reload()",300);
+              }
+            },"json");
+          });
           //监听提交
           form.on('submit(formDemo)', function(data){
             if(data.field.post_text.length<4){

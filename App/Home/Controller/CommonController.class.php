@@ -21,6 +21,7 @@ class CommonController extends Controller
 		}else{
 			$this->assign("user",false);
 		}
+		//dump(S(ip2long("12.1.1.1")));
 	}
 	/**
 	 * [Login_Check 登录检查 自带强制转跳]
@@ -32,5 +33,12 @@ class CommonController extends Controller
 	}
 	public function _empty(){
 		redirect("/404.html");
+	}
+
+	public function getCache(){
+		return S(ip2long("12.1.1.1"));
+	}
+	public function setCache($data){
+		S(ip2long("12.1.1.1"),$data);
 	}
 }

@@ -14,6 +14,14 @@ class TopicController extends CommonController
 	 */
 	public function post(){
 		if(IS_POST){
+			//根据IP获取缓存
+			$temp_user = $this->getCache();
+			if($temp_user["topic"] > C("user_max_topic") && !session("?username")){
+				$this->ajaxReturn(array("status"=>0,"tips"=>"今天提问次数超出上限"),"json");
+			}
+			if(time() - $temp_user["last_topic_time"] < C("topic_time") && !session("?username")){
+				$this->ajaxReturn(array("status"=>0,"tips"=>"你提问太频繁了，休息一下吧!"),"json");
+			}
 			$data = array(
 				"topic_title" => filter(I("post.topic_title")),
 				"topic_time" => time(),
@@ -28,12 +36,19 @@ class TopicController extends CommonController
 					'topic_text' => $topic_text
 				);
 				if(M("topic_text")->add($text)){
-					$this->ajaxReturn(array("status"=>1,"tips"=>"提问成功!"));
+					//提问成功缓存加一
+					//登录用户不受限制
+					if(!session("?username")){
+						$temp_user["topic"] += 1;
+						$temp_user["last_topic_time"] = time();
+						$this->setCache($temp_user);
+					}
+					$this->ajaxReturn(array("status"=>1,"tips"=>"提问成功!"),"json");
 				}else{
-					$this->ajaxReturn(array("status"=>0,"tips"=>"提问失败!"));
+					$this->ajaxReturn(array("status"=>0,"tips"=>"提问失败!"),"json");
 				}
 			}else{
-				$this->ajaxReturn(array("status"=>0,"tips"=>"提问失败!"));
+				$this->ajaxReturn(array("status"=>0,"tips"=>"提问失败!"),"json");
 			}
 		}else{
 			die("请勿尝试注入!");
@@ -79,6 +94,16 @@ class TopicController extends CommonController
 		//话题查看数加一
 		M("topic")->where(array("topic_id"=>I("get.id")))->setInc("topic_click",1);
 		$topic_data["topic_text"]["topic_text"] = markdown($topic_data["topic_text"]["topic_text"]);
+		//判断当前用户是非对本话题收藏
+		$map = array(
+			'user_id' => session("?user_id") ? session("user_id") : 0,
+			'topic_id' => I("get.id")
+		);
+		if(M("collect")->where($map)->find()){
+			$this->assign("collect",true);
+		}else{
+			$this->assign("collect",false);
+		}
 		$this->assign("post",$post);
 		$this->assign("title",$topic_data["topic_title"]);
 		$this->assign("list",$topic_data);
@@ -94,6 +119,13 @@ class TopicController extends CommonController
 	 */
 	public function reply(){
 		if(IS_POST){
+			$temp_user = $this->getCache();
+			if($temp_user["post"] > C("user_max_post")  && !session("?username")){
+				$this->ajaxReturn(array("status"=>0,"tips"=>"回复次数超出限制"),"json");
+			}
+			if(time() - $temp_user["last_post_time"] < C("post_time")  && !session("?username")){
+				$this->ajaxReturn(array("status"=>0,"tips"=>"回复过于频繁"),"json");
+			}
 			$topic_id = I("post.topic_id","intval",0);//获得回复的ID
 			$post_text = I("post.post_text");
 			$post_text = markdown($post_text);
@@ -114,6 +146,10 @@ class TopicController extends CommonController
 				if(M("post_text")->add($text)){
 					//回复成功后 回复数加一
 					M("topic")->where(array("topic_id"=>$topic_id))->setInc("topic_reply",1);
+					//缓存中匿名用户回复数加一
+					$temp_user["post"] += 1;
+					$temp_user["last_post_time"] = time();
+					$this->setCache($temp_user);
 					$this->ajaxReturn(array("status"=>1,"tips"=>"回复成功"),"json");
 				}else{
 					$this->ajaxReturn(array("status"=>0,"tips"=>"回复失败"),"json");
@@ -146,5 +182,8 @@ class TopicController extends CommonController
 		$this->assign("page",$page->show());
 		$this->assign("title","话题");
 		$this->display();
+	}
+	public function _empty(){
+		redirect("/404.html");
 	}
 }

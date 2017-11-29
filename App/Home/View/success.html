@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>信息提示</title>
+  <link rel="stylesheet" href="/Public/layui/css/layui.css">
+  <link rel="stylesheet" href="/Public/css/global.css">
+</head>
+<body>
+	<ul class="layui-nav layui-bg-green" lay-filter="">
+		<img src="__PUBLIC__/images/logo.png" alt="" style="width: 40px;height: 40px;">
+	  <li class="layui-nav-item"><a href="/">{$Think.config.WEB_NAME}</a></li>
+	  <li class="layui-nav-item"><a href="/t">问答</a></li>
+	  <li class="layui-nav-item"><a href="/s">收藏</a></li>
+	  <if condition="$user eq false">
+	  <li class="layui-nav-item layui-nav-right"><a href="/u">登录</a></li>
+	  <else />
+	  <li class="layui-nav-item layui-nav-right"><a href="/info">{$user.username}</a></li>
+	  </if>
+	</ul>
+	<style>
+		.layui-nav-right{
+			margin-left: 70%;
+		}
+	</style>
+<div class="main">
+  <div class="fly-panel">
+    <div class="fly-none">
+      <h4><i class="iconfont icon-tishilian"></i></h2>
+      <h1><?php echo $message;?></h1>
+    </div>
+  </div>
+</div>
+</body>
+</html>

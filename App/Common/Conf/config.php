@@ -20,4 +20,8 @@ return array(
     'DB_PREFIX'             =>  '',    // 数据库表前缀
     'SHOW_PAGE_TRACE'            =>  true,
     'LOAD_EXT_CONFIG' => 'Web', 
+    'MODULE_ALLOW_LIST'    =>    array('Home','Admin'),
+    'DEFAULT_MODULE'       =>    'Home',
+    'TMPL_ACTION_ERROR'     =>  APP_PATH.'Home/View/error.html', // 默认错误跳转对应的模板文件
+    'TMPL_ACTION_SUCCESS'   =>  APP_PATH.'Home/View/success.html', // 默认成功跳转对应的模板文件
 );

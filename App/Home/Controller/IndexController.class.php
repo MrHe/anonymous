@@ -7,6 +7,12 @@ use Think\Controller;
  */
 class IndexController extends CommonController {
     public function index(){
-       
+       redirect("/t");
     }
+    public function _empty(){
+		redirect("/404.html");
+	}
+	public function test(){
+		$this->error("fraed");
+	}
 }

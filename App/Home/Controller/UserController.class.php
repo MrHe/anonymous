@@ -26,22 +26,20 @@ class UserController extends CommonController
 			}else{
 				$access_token = $arr["access_token"];
 			}
-			
-
 			$url = "https://api.github.com/user?access_token=".$arr["access_token"];
 			$client = new \Org\Util\Curl();
 			$res = $client->request($url,"get",false,["User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36"]);
 			$res = json_decode($res[0],true);//把结果转成数组格式
 			if($user = M("user")->where(array("github_id"=>$res["id"]))->find()){
 				session("username",$user["username"]);
-				$this->success("登录成功!");
+				redirect("/t");
 			}else{
 				$data["username"] = $res["login"];
 				$data["user_avatar"] = $res["avatar_url"];
 				$data["github_id"] = $res["id"];
 				if(M("user")->add($data)){
 					session("username",$res["login"]);
-					$this->success("登录成功!","/t");
+					redirect("/t");
 				}else{
 					$this->error("登录失败!");
 				}
@@ -62,5 +60,8 @@ class UserController extends CommonController
 		$this->assign("topic_count",$topic_count);
 		$this->assign("list",$user);
 		$this->display();
+	}
+	public function _empty(){
+		redirect("/404.html");
 	}
 }

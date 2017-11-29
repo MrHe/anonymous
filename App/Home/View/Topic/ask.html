@@ -28,7 +28,7 @@
           topic_text:$("#content").val()
         },function(data){
           if(data.status==1){
-            layer.alert("提问成功",{
+            layer.alert(data.tips,{
               skin: 'layui-layer-molv' //样式类名
               ,closeBtn: 0
             },function(){
@@ -36,7 +36,7 @@
               parent.layer.close(index);
             });
           }else{
-            layer.alert("提问失败");
+            layer.alert(data.tips);
           }
         },"json");
       });
