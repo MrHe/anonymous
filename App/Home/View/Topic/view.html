@@ -45,11 +45,13 @@
       </div>
       <form class="layui-form" method="post">
         <input type="hidden" name="topic_id" value="{$list.topic_id}">
+          <blockquote class="layui-elem-quote">本站支持MarkDown语法</blockquote>
           <div class="layui-form-item layui-form-text">
               <textarea name="post_text" placeholder="请输入回复内容" class="layui-textarea"></textarea>
           </div>
           <div class="layui-form-item">
-              <button class="layui-btn" lay-submit lay-filter="formDemo">回复</button>
+              <button class="layui-btn layui-btn-radius" lay-submit lay-filter="formDemo">回复</button>
+              <span class="layui-btn layui-btn-radius layui-btn-warm">收藏</span>
           </div>
       </form>
       <script>
@@ -59,8 +61,11 @@
           var $ = layui.jquery;
           //监听提交
           form.on('submit(formDemo)', function(data){
+            if(data.field.post_text.length<4){
+              layer.msg("您的回复内容过短");
+              return false;
+            }
             var url = "{:U('Home/Topic/reply')}";
-            
             $.post(url,{
               topic_id:data.field.topic_id,
               post_text:data.field.post_text

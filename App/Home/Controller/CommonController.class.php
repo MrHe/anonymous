@@ -16,6 +16,7 @@ class CommonController extends Controller
 	public function _initialize(){
 		if(session("?username")){
 			$userdata = M("user")->where(array("username"=>session("username")))->find();
+			session("user_id",$userdata["user_id"]);
 			$this->assign("user",$userdata);
 		}else{
 			$this->assign("user",false);
@@ -28,5 +29,8 @@ class CommonController extends Controller
 		if(!session("?username")){
 			redirect("/u");
 		}
+	}
+	public function _empty(){
+		redirect("/404.html");
 	}
 }

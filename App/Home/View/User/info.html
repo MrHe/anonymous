@@ -1,0 +1,18 @@
+<extend name="Public:base" />
+<block name="main">
+
+<div class="main layui-clear">
+  <div class="wrap">
+    <div class="fly-home" style="background-image: url();">
+      <img src="{$list.user_avatar}">
+      <h1>
+        {$list.username}
+      </h1>
+      <p class="fly-home-info">
+        <i class="iconfont" title="话题">&#xe611;</i><span style="color: #FF7200;">{$topic_count}个话题</span>
+        <i class="iconfont icon-shijian"></i><span>{$list.register_time|timespan} 加入</span>
+      </p>
+      <!-- <p class="fly-home-sign">（人生仿若一场修行）</p> -->
+    </div>
+  </div>
+</block>

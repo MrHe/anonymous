@@ -53,7 +53,14 @@ class UserController extends CommonController
 	 * @return [type] [description]
 	 */
 	public function info(){
-		//$this->Login_Check();
-		dump(session(""));
+		$this->Login_Check();
+		$user = M("user")->where(array("username"=>session("username")))->find();
+		if(!$user){
+			$this->error("不存在这个用户!");
+		}
+		$topic_count = M("topic")->where(array("topic_poster"=>$user["user_id"]))->count();
+		$this->assign("topic_count",$topic_count);
+		$this->assign("list",$user);
+		$this->display();
 	}
 }

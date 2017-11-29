@@ -2,11 +2,11 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006-2014 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006-2018 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi@vip.qq.com> <http://www.zjzit.cn>
+// | Author: 木子的忧伤 <1099438829@qq.com> 
 // +----------------------------------------------------------------------
 namespace Think;
 
@@ -16,9 +16,9 @@ class Page{
     public $parameter; // 分页跳转时要带的参数
     public $totalRows; // 总行数
     public $totalPages; // 分页总页面数
-    public $rollPage   = 11;// 分页栏每页显示的页数
+    public $rollPage   = 5;// 分页栏每页显示的页数
 	public $lastSuffix = true; // 最后一页是否显示总页数
-
+    public $routerUrl;
     private $p       = 'p'; //分页参数名
     private $url     = ''; //当前链接URL
     private $nowPage = 1;
@@ -26,12 +26,12 @@ class Page{
 	// 分页显示定制
     private $config  = array(
         'header' => '<span class="rows">共 %TOTAL_ROW% 条记录</span>',
-        'prev'   => '<<',
-        'next'   => '>>',
-        'first'  => '1...',
-        'last'   => '...%TOTAL_PAGE%',
-        // 'theme'  => '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
-        'theme'  => '%FIRST% %UP_PAGE% %link_PAGE% %DOWN_PAGE% %END%',
+        'prev'   => '上一页',
+        'next'   => '下一页',
+        'first'  => '首页',
+        'last'   => '末页',
+        // 'theme'  => '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%',
+         'theme'  => '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
     );
 
     /**
@@ -80,7 +80,7 @@ class Page{
 
         /* 生成URL */
         $this->parameter[$this->p] = '[PAGE]';
-        $this->url = U(ACTION_NAME, $this->parameter);
+        $this->url = $this->routerUrl?str_replace('[PAGE]',urlencode('[PAGE]'),$this->routerUrl):U(ACTION_NAME, $this->parameter);
         /* 计算分页信息 */
         $this->totalPages = ceil($this->totalRows / $this->listRows); //总页数
         if(!empty($this->totalPages) && $this->nowPage > $this->totalPages) {
@@ -90,27 +90,22 @@ class Page{
         /* 计算分页临时变量 */
         $now_cool_page      = $this->rollPage/2;
 		$now_cool_page_ceil = ceil($now_cool_page);
-		$this->lastSuffix && $this->config['last'] = $this->totalPages;
 
         //上一页
         $up_row  = $this->nowPage - 1;
-        $up_page = $up_row > 0 ? '<a class="prev" href="' . $this->url($up_row) . '">' . $this->config['prev'] . '</a>' : '';
+        $up_page = $up_row > 0 ? '<a class="prev layui-laypage-prev" href="' . $this->url($up_row) . '">' . $this->config['prev'] . '</a>' : '';
 
         //下一页
         $down_row  = $this->nowPage + 1;
-        $down_page = ($down_row <= $this->totalPages) ? '<a class="next" href="' . $this->url($down_row) . '">' . $this->config['next'] . '</a>' : '';
+        $down_page = ($down_row <= $this->totalPages) ? '<a class="next layui-laypage-next" href="' . $this->url($down_row) . '">' . $this->config['next'] . '</a>' : '';
 
         //第一页
-        $the_first = '';
-        if($this->totalPages > $this->rollPage && ($this->nowPage - $now_cool_page) >= 1){
-            $the_first = '<a class="first" href="' . $this->url(1) . '">' . $this->config['first'] . '</a>';
-        }
+            $the_first = '<a class="first laypage_first" href="' . $this->url(1) . '">' . $this->config['first'] . '</a>';
+        // }
 
         //最后一页
-        $the_end = '';
-        if($this->totalPages > $this->rollPage && ($this->nowPage + $now_cool_page) < $this->totalPages){
-            $the_end = '<a class="end" href="' . $this->url($this->totalPages) . '">' . $this->config['last'] . '</a>';
-        }
+            $the_end = '<a  class="layui-laypage-last end"  href="' . $this->url($this->totalPages) . '">' . $this->config['last'] . '</a></div>';
+        // }
 
         //数字连接
         $link_page = "";
@@ -122,7 +117,8 @@ class Page{
 			}else{
 				$page = $this->nowPage - $now_cool_page_ceil + $i;
 			}
-            if($page > 0 && $page != $this->nowPage){
+            if ($page>0) {
+                if($page != $this->nowPage){
 
                 if($page <= $this->totalPages){
                     $link_page .= '<a class="num" href="' . $this->url($page) . '">' . $page . '</a>';
@@ -130,15 +126,14 @@ class Page{
                     break;
                 }
             }else{
-                if($page > 0 && $this->totalPages != 1){
-                    $link_page .= '<span class="current">' . $page . '</span>';
+                    $link_page .= '<span class="layui-laypage-curr current"><em class="layui-laypage-em"></em><em>' . $page . '</em></span>';
                 }
             }
         }
 
         //替换分页内容
         $page_str = str_replace(
-            array('%HEADER%', '%NOW_PAGE%', '%UP_PAGE%', '%DOWN_PAGE%', '%FIRST%', '%link_PAGE%', '%END%', '%TOTAL_ROW%', '%TOTAL_PAGE%'),
+            array('%HEADER%', '%NOW_PAGE%', '%UP_PAGE%', '%DOWN_PAGE%', '%FIRST%', '%LINK_PAGE%', '%END%', '%TOTAL_ROW%', '%TOTAL_PAGE%'),
             array($this->config['header'], $this->nowPage, $up_page, $down_page, $the_first, $link_page, $the_end, $this->totalRows, $this->totalPages),
             $this->config['theme']);
         return '<div  class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-0">'.$page_str.'</div>';

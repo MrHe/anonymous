@@ -30,14 +30,14 @@
       <ul class="fly-list">
         <volist name="list" id="vo">
           <li class="fly-list-li">
-              <a href="user/home.html" class="fly-list-avatar">
-                <img src="http://tp4.sinaimg.cn/1345566427/180/5730976522/0" alt="">
+              <a href="" class="fly-list-avatar">
+                <img src="{$vo.user_avatar}" alt="">
               </a>
               <h2 class="fly-tip">
                 <a href="/v/{$vo.topic_id}">{$vo.topic_title|htmlspecialchars_decode}</a>
               </h2>
               <p>
-                <span><a href="user/home.html">{$vo.topic_poster|default="anonymous"}</a></span>
+                <span><a href="">{$vo.topic_poster|default="anonymous"}</a></span>
                 <span>{$vo.topic_time|timespan}</span>
                 <!-- <span>layui框架综合</span> -->
                 <span class="fly-list-hint"> 
@@ -48,11 +48,12 @@
             </li>
           </volist>
       </ul>
-      <div id="page" style="margin:0 auto;">
+     <!--  <div id="page" style="margin:0 auto;">
         <span class="layui-btn" style="width: 100%;margin-top: 10px;">下一页</span>
         <input type="hidden" id="num" value="{$Think.get.p|default='1'}">
-      </div>
-      <script>
+      </div> -->
+      {$page}
+      <!-- <script>
         function jump(count,url) { 
             window.setTimeout(function(){  
                 count--;  
@@ -72,7 +73,7 @@
               jump(1,url);
           });
         });
-      </script>
+      </script> -->
   </div>
 </div>
 </block>
