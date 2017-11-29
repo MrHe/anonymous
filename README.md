@@ -4,7 +4,7 @@ anonymous是基于ThinkPHP3.2.3开发的匿名提问社区
 
 使用PHP+MySQL数据库 开发 前端页面使用layui
 
-##特性
+## 特性
 
 - 所有操作均匿名(发布话题、回复)
 - 不会记录IP(良心保证，不信自己看代码)
@@ -32,7 +32,7 @@ anonymous是基于ThinkPHP3.2.3开发的匿名提问社区
 ![用户界面](http://upload-images.jianshu.io/upload_images/5227517-af0127e2a4635ee3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-####第一步、下载源码
+#### 第一步、下载源码
 
 能在这个全球最大的同性交友网站上混的，应该都会吧
 
@@ -53,7 +53,7 @@ git clone https://github.com/cutephp/anonymous
 ![下载源码包](http://upload-images.jianshu.io/upload_images/5227517-5345420d47bab659.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-####第二步、导入数据库文件
+#### 第二步、导入数据库文件
 
 在源码中有一个anonymous.sql文件，随便建一个数据库，然后导入即可
 
@@ -67,7 +67,7 @@ git clone https://github.com/cutephp/anonymous
 
 表结构都有注释的
 
-####第三步、修改配置文件
+#### 第三步、修改配置文件
 
 配置文件总共有两个
 
@@ -85,17 +85,17 @@ git clone https://github.com/cutephp/anonymous
 
 然后就可以正常使用啦!
 
-####关于github登录
+#### 关于github登录
 
 首先你要自己申请一个应用，替换掉我的key和secert
 
 回调地址填写http://yourdomain.com/u即可
 
-####关于底部版权
+#### 关于底部版权
 
 你随便改，文件就在App/Home/View/Public/base.html里面
 
-####最后
+#### 最后
 
 是的 这个网站暂时没有后台，因为我懒~~~
 
